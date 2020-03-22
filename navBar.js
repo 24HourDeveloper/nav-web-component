@@ -57,6 +57,7 @@ template.innerHTML = `
                 padding:10px 0;
                 border-bottom:.5px solid #eee
             }
+            
           }
     </style>
     <header>
@@ -83,21 +84,34 @@ class NavBar extends HTMLElement {
         this.shadowRoot.querySelector('h1').innerText = this.getAttribute('logo')
         const links = this.shadowRoot.querySelector('ul')
         const linkText = this.getAttribute('links')
+        const addresses = this.getAttribute('hrefs')
+        const hrefs = addresses.split(",")
         const text = linkText.split(",")
 
         const header = this.shadowRoot.querySelector('.header-container')
         header.style.backgroundColor = this.getAttribute('bg-color')
         header.style.color = this.getAttribute('text')
 
-        this.mapLinks(text, links)
+        this.mapLinks(text, links, hrefs)
 
     }
 
-    mapLinks = (array, element) =>{
-        array.map(item =>{
+    mapLinks = (array, element, address) =>{
+        const linkAddress = address.map(link => link)
+
+        array.map((item, index) =>{
             const li = document.createElement('li')
             li.classList.add("li-links")
-            element.appendChild(li).innerText = item
+
+            element.appendChild(li).innerHTML = `
+            <style>
+                a{
+                    text-decoration:none;
+                    color:${this.getAttribute('text')}
+                }
+            </style>
+            <a href="${linkAddress[index]}">${item}</a>
+            `
         })
     }
 }
